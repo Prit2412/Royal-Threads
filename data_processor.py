@@ -1,24 +1,19 @@
 # HIGH RISK FILE — data_processor.py
 
-import time
-
 def process_data(items):
     duplicates = []
-
-    # ❌ Extremely slow O(n^2) nested loop
-    for i in range(len(items)):
-        for j in range(len(items)):
-            if items[i] == items[j] and i != j:
-                duplicates.append(items[i])
-
-    # ❌ Useless sleep → performance degradation
-    time.sleep(2)
-
-    # ❌ Unused variable
-    temp_cache = {}
-
-    return duplicates
-
-# ❌ Dead code
-debug_mode = True
-debug_mode = False
+    try:
+        counts = {}
+        for x in items:
+            counts[x] = counts.get(x, 0) + 1
+        for x, c in counts.items():
+            if c > 1:
+                duplicates.extend([x] * (c * (c - 1)))
+        return duplicates
+    except TypeError:
+        for i in range(len(items)):
+            ai = items[i]
+            for j in range(len(items)):
+                if i != j and ai == items[j]:
+                    duplicates.append(ai)
+        return duplicates
